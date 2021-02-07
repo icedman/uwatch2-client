@@ -78,6 +78,37 @@ const SpriteOffsetsOffset = 200;
 const SpriteSizesOffset = 1200;
 const SpriteDataOffset = 1700;
 
+const makeImage = (data, width, height) => {
+  const buf = new Uint8ClampedArray(width * height * 4);
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < height; y++) {
+      const pixelOffset = (x + y * width) * 2;
+      const [r, g, b] = readPixel(data, pixelOffset);
+      let bufOffset = (x + y * width) * 4;
+      buf[bufOffset + 3] = r;
+      buf[bufOffset + 2] = g;
+      buf[bufOffset + 1] = b;
+      buf[bufOffset + 0] = 0xff;
+    }
+  }
+  return { data: buf, width, height }
+};
+
+const normalize = (v, source, target) => (v / source) * target;
+
+const readPixel = (dv, offset) => {
+  if (offset + 1 >= dv.byteLength) {
+    return [0xff, 0xff, 0xff];
+  }
+  const pixel = dv.getUint16(offset);
+  return [
+    normalize((pixel >> (5 + 6)) & 0x1f, 0x1f, 0xff),
+    normalize((pixel >> 5) & 0x3f, 0x3f, 0xff),
+    normalize(pixel & 0x1f, 0x1f, 0xff),
+  ];
+};
+
+
 const decodeRle = (dv, offset, size) => {
   const result = new Uint16Array(1e6);
   let ptr = 0;
@@ -221,8 +252,10 @@ const encodeWatchface = (data) => {
   return new DataView(dv.buffer.slice(0, SpriteDataOffset + idx ));
 }
 
-module.exports = { 
+module.exports = {
+  makeImage,
   parseWatchface,
   encodeWatchface,
-  EntitySpriteCounts
+  EntitySpriteCounts,
+  EntityTypes
 }
