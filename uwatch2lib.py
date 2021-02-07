@@ -11,6 +11,8 @@ import tzlocal
 
 import _uwatch2ble
 
+import time
+
 log = logging.getLogger(__name__)
 
 
@@ -131,7 +133,82 @@ class Uwatch2(_uwatch2ble.Uwatch2Ble):
     #     """
     #     return self._get_raw_cmd(0x59, None, "B")
 
+    def c(self, cmd):
+        return self._send_c(cmd)
+
+
+    def f(self, id):
+        self.c("fe ea 10 06 19 04") # - send display watchface
+        self._send_f(id)
+        # self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 00 00"))
+        time.sleep(2)
+        
+        self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 00 00"))
+        time.sleep(2)
+        self.c("fe ea 10 06 19 04")
+        
+        self.c("fe ea 10 06 19 04") # - send display watchface
+        self.c("fe ea 10 05 29") # - query watchface
+        self.c("fe ea 10 05 84") # - query support watchface
+
+        self._consume(20)
+
+        self.c("fe ea 10 06 19 04")
+
+
+    def x(self, cnt):
+        # fe ea 10 0a 31 5d 98 9a 94 08 - sync time
+        # fe ea 10 09 12 aa 41 14 00 - set user info
+        # fe ea 10 09 16 00 00 1f 40 - set step goal
+        # fe ea 10 06 1a 00 - set metric system
+        # fe ea 10 06 17 01 - set time system
+        self.c("fe ea 10 05 2f") # - query heart rate
+        self.c("fe ea 10 05 2b") # - query device language
+        self.c("fe ea 10 05 39") # - query watchface layout
+        self.c("fe ea 10 06 25 ff") # - query device function support
+        # fe ea 10 05 85 - query physiological period
+        # fe ea 10 05 32 - sync sleep
+        # fe ea 10 05 34 - query dynamic rate
+        # fe ea 10 06 35 04 - query heart rate
+        # fe ea 10 06 59 00 - query steps
+        # fe ea 10 06 59 02 - query steps
+        self.c("fe ea 10 06 1e 01") # - send device version
+        # fe ea 10 06 1b 00 - send device language
+        # fe ea 10 06 54 4f - send step length
+        # fe ea 10 20 43 00 00 04 00 20 00 20 00 20 00 20 00 6e 00 75 00 6c 00 6c 00 4d 00 6 - send today weather
+        # fe ea 10 1a 42 00 01 08 00 00 06 00 fd 05 00 ff 06 03 02 0a 03 05 0b 00 04 0b - send future weather
+        # fe ea 10 06 35 05 - query heart rate
+        # fe ea 10 06 35 06 - query heart rate
+        # fe ea 10 06 35 07 - query heart rate
+        self.c("fe ea 10 05 29") # - query watchface
+        self.c("fe ea 10 05 84") # - query support watchface
+        self.c("fe ea 10 05 29") # - query watchface
+        self.c("fe ea 10 05 84") # - query support watchface
+        self.c("fe ea 10 05 29") # - query watchface
+        self.c("fe ea 10 05 84") # - query support watchface
+        self.c("fe ea 10 05 29") # - query watchface
+        self.c("fe ea 10 05 84") # - query support watchface
+        self.c("fe ea 10 06 19 03") # - send display watchface
+        # self.c("fe ea 10 06 19 04") # - send display watchface
+        self.c("fe ea 10 06 19 03") # - send display watchface
+        self.c("fe ea 10 06 19 02") # - send display watchface
+        self.c("fe ea 10 06 19 01") # - send display watchface
+        # self.c("fe ea 10 06 19 04") # - send display watchface
+
+        self._consume(cnt)
+
+    def zz(self):
+        self._zz();
+
     # Quick View
+    def xx(self, id):
+        self.set_watch_face(0)
+        # self._yy()
+        self._xx(id)
+        self._yy()
+
+    def yy(self):
+        return self._yy()
 
     def set_quick_view(self, enabled_bool):
         """Enable or disable Quick View

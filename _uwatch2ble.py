@@ -16,7 +16,6 @@ import pygatt.exceptions
 
 log = logging.getLogger(__name__)
 
-
 class Uwatch2Ble(object):
     COMMAND_UUID = uuid.UUID("0000fee2-0000-1000-8000-00805f9b34fb")
     DATA_UUID = uuid.UUID("0000fee6-0000-1000-8000-00805f9b34fb")
@@ -221,6 +220,149 @@ class Uwatch2Ble(object):
         """Query with response"""
         self._send_raw_cmd(cmd_key, pack_str, *arg_tup)
         return self._get_response(cmd_key, unpack_str)
+
+    def crc16(bytes):
+        return "x"
+
+    def _consume(self, cnt):
+        for i in range(cnt):
+            msg_type, *msg_tup = self._queue.get()
+            log.info(f"Read from queue: msg_type={msg_type} msg_tup={msg_tup}")
+        log.info("consume")
+
+    def _consume2(self, cmd, cnt):
+        for i in range(cnt):
+            msg_type, *msg_tup = self._queue.get()
+            if msg_type == "notification":
+                recv_charcs_handle, recv_pkg_bytes = msg_tup
+                acc_payload_bytes = self._handle_async_response(cmd, recv_pkg_bytes)
+                if acc_payload_bytes:
+                    log.info(self.unpack_payload_bytes(acc_payload_bytes, unpack_str))
+        log.info("consume")
+
+    def _zz(self):
+        self._send_payload(self._get_bytes("fe ea 10 06 25 ff"))
+        self._consume2(0x255, 10)
+
+    def _yy(self):
+        self._send_payload(self._get_bytes("fe ea 10 06 19 04"))
+        self._consume(1)
+
+    def _xx(self, id):
+
+        log.info("sending")
+
+        self._send_payload(self._get_bytes("fe ea 10 05 84"))
+        self._consume(1)
+        self._send_payload(self._get_bytes("fe ea 10 05 29"))
+        self._consume(1)
+
+        # self._yy()
+
+        cnt = 0
+        cnt2 = 0
+
+        # self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 00 00"))
+
+        # data 15
+        if id == 15:
+            file1 = open('data-15.txt', 'r')
+            self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 f0 90"))
+        else:
+            # data 26
+            file1 = open('data-26.txt', 'r')
+            self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 4b f6"))
+
+        # send device version
+        # self._send_payload(self._get_bytes("fe ea 10 06 1e 01"))
+
+        # send device language
+        # self._send_payload(self._get_bytes("fe ea 10 06 1b 00"))
+
+        Lines = file1.readlines()
+        for line in Lines:
+            log.info(cnt)
+            cnt = cnt + 1
+            cnt2 = cnt2 + 1
+
+            self._send_payload2(self._get_bytes(line.strip()))
+
+            # if (cnt2 > 13):
+            #     self._consume(14)
+            #     cnt2 = 0
+
+        log.info("ok?")
+        self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 00 00"))
+        self._consume(1)
+
+        self._yy()
+
+        self._send_payload(self._get_bytes("fe ea 10 05 29"))
+        self._consume(1)
+        self._send_payload(self._get_bytes("fe ea 10 05 84"))
+        self._consume(1)
+
+    def _send_c(self, cmd):
+        self._send_payload(self._get_bytes(cmd))
+
+    def _send_f(self, id):
+        cnt = 0
+        cnt2 = 0
+        if id == 15:
+            file1 = open('data-15.txt', 'r')
+            self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 f0 90"))
+        else:
+            # data 26
+            file1 = open('data-26.txt', 'r')
+            self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 4b f6"))
+
+        # send device version
+        self._send_payload(self._get_bytes("fe ea 10 06 1e 01"))
+
+        # send device language
+        self._send_payload(self._get_bytes("fe ea 10 06 1b 00"))
+
+        Lines = file1.readlines()
+        for line in Lines:
+            log.info(cnt)
+            cnt = cnt + 1
+            cnt2 = cnt2 + 1
+            
+            # if (cnt2 > 13):
+            #     self._consume(14)
+            #     cnt2 = 0
+
+            self._send_payload2(self._get_bytes(line.strip()))
+
+    def _send_payload(self, payload_bytes):
+
+        if not self._is_connected:
+            self._reconnect()
+
+        # self._write_command(self.COMMAND_UUID, pkg_bytes)
+        buf = io.BytesIO(payload_bytes)
+        while True:
+            # ATT write requests and notifications contain max 20 data bytes
+            chunk = buf.read(20)
+            if not chunk:
+                return
+            log.debug(f"  Writing chunk: {self._get_hex_str(chunk)}")
+            self._write_to_characteristic(self.COMMAND_UUID, chunk)
+
+    def _send_payload2(self, payload_bytes):
+
+        if not self._is_connected:
+            self._reconnect()
+
+        # self._write_command(self.COMMAND_UUID, pkg_bytes)
+        buf = io.BytesIO(payload_bytes)
+        while True:
+            # ATT write requests and notifications contain max 20 data bytes
+            chunk = buf.read(20)
+            if not chunk:
+                return
+            log.debug(f"  Writing chunk: {self._get_hex_str(chunk)}")
+            self._write_to_characteristic(self.DATA_UUID, chunk)
 
     def _send_packet(self, payload_bytes):
         header_bytes = self._gen_header(payload_bytes)
