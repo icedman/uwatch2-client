@@ -1,3 +1,11 @@
+## possible compatible watches
+SENBONO S08 (no custom watchfaces)
+COLMI LAND 1?
+COLMI SN58?
+COLMI Q8
+COLMI SN60 Plus
+DA FIT Y7 (no custom watchfaces)
+
 ## Python library and client for the UMIDIGI Uwatch2 smart watch (Linux )
 
 Based on [reverse engineering of the protocol by @kabbi](https://gist.github.com/kabbi/854a541c1a32e15fb0dfa3338f4ee4a9).

@@ -78,7 +78,7 @@ const SpriteOffsetsOffset = 200;
 const SpriteSizesOffset = 1200;
 const SpriteDataOffset = 1700;
 
-const makeImage = (data, width, height) => {
+const dataViewToImage = (data, width, height) => {
   const buf = new Uint8ClampedArray(width * height * 4);
   for (let x = 0; x < width; x++) {
     for (let y = 0; y < height; y++) {
@@ -94,7 +94,32 @@ const makeImage = (data, width, height) => {
   return { data: buf, width, height }
 };
 
-const normalize = (v, source, target) => (v / source) * target;
+const imageToDataView = (bmp) => {
+  const data = bmp.data;
+  const width = bmp.width;
+  const height = bmp.height;
+  const dv = new DataView(new ArrayBuffer(1e6));
+  let ptr = 0;
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+        const pixelOffset = (x * 4) + (y * width * 4);
+        let r = data[pixelOffset + 1];
+        let g = data[pixelOffset + 2];
+        let b = data[pixelOffset + 3];
+        b = normalize(b, 0xff, 0x1f) << (5+6);
+        g = normalize(g, 0xff, 0x3f) << 5;
+        r = normalize(r, 0xff, 0x1f);
+        let pixel = r | g | b;
+        dv.setUint16(ptr, pixel);
+        ptr += 2;
+      }
+  }
+
+  return new DataView(dv.buffer.slice(0, ptr));
+};
+
+const normalize = (v, source, target) => Math.round((v / source) * target);
 
 const readPixel = (dv, offset) => {
   if (offset + 1 >= dv.byteLength) {
@@ -108,10 +133,10 @@ const readPixel = (dv, offset) => {
   ];
 };
 
-
 const decodeRle = (dv, offset, size) => {
   const result = new Uint16Array(1e6);
   let ptr = 0;
+
   for (let i = offset; i < offset + size; i += 3) {
     let color = dv.getUint16(i, true);
     const size = dv.getUint8(i + 2);
@@ -128,7 +153,7 @@ const encodeRle = (dv) => {
   let prev = -1;
   for(let i=0;i<dv.byteLength;i+=2) {
     let color = dv.getUint16(i, true);
-    if ((prev != color && sz > 0) || sz >= 240) {
+    if ((prev != color && sz > 0) || sz > 255) {
       result.setUint16(idx, prev, true);
       idx += 2;
       result.setUint8(idx, sz);
@@ -147,7 +172,7 @@ const encodeRle = (dv) => {
   return new DataView(result.buffer.slice(0, idx));
 };
 
-const parseWatchface = data => {
+const decodeWatchface = data => {
   const parsed = { bg: null, entities: [], sprites: [] };
   const dv = new DataView(data);
   parsed.raw = dv;
@@ -183,16 +208,15 @@ const parseWatchface = data => {
     const spriteOffset =
       SpriteDataOffset + dv.getUint32(SpriteOffsetsOffset + i * 4, true);
     const length = dv.getUint16(SpriteSizesOffset + i * 2, true);
-    // console.log(length);
     const _type = dv.getUint16(spriteOffset)
     const type = _type
       .toString(16)
       .padStart(4, '0');
     parsed.sprites.push({
       index: i,
-      _offset: spriteOffset - SpriteDataOffset,
-      _length: length,
-      _type: type,
+      // _offset: spriteOffset - SpriteDataOffset,
+      // _length: length,
+      // _type: type,
       data:
         type === '0821'
           ? decodeRle(dv, spriteOffset + 2, length - 2)
@@ -253,8 +277,11 @@ const encodeWatchface = (data) => {
 }
 
 module.exports = {
-  makeImage,
-  parseWatchface,
+  dataViewToImage,
+  imageToDataView,
+  encodeRle,
+  decodeRle,
+  decodeWatchface,
   encodeWatchface,
   EntitySpriteCounts,
   EntityTypes
