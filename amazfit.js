@@ -111,7 +111,7 @@ if (amazfitData.Activity && amazfitData.Activity.Steps) {
       "_type": 0x74,
       "type": "StepsRight",
       // "x": amazfitData.Activity.Steps.TopLeftX,
-      "x": 176-10,
+      "x": 176-5,
       "y": amazfitData.Activity.Steps.TopLeftY,
       "width": 20,
       "height": 35,
@@ -177,6 +177,29 @@ if (amazfitData.Battery && amazfitData.Battery.Text) {
     })
 }
 
+// disconnected
+data.entities.push({
+      "_type": 0xf0,
+      "type": "Icon",
+      "x": 10,
+      "y": 10,
+      "width": 22,
+      "height": 22,
+      "sprite": 45
+    })
+
+// connected
+data.entities.push(
+    {
+      "_type": 192,
+      "type": "ConnectionStatusIcon",
+      "x": 10,
+      "y": 10,
+      "width": 22,
+      "height": 22,
+      "sprite": 44
+    })
+
 {
     // digits
     let nmap = [1,2,3,7,8,9,10,11,12,13]
@@ -212,7 +235,7 @@ if (amazfitData.Battery && amazfitData.Battery.Text) {
         })
     })
 
-    icons = ['heart','percent','dots']
+    icons = ['heart','percent','dots','connected','disconnected']
     icons.forEach(n => {
         data.sprites.push({
           "index": data.sprites.length,

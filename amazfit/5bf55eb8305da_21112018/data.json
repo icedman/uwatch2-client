@@ -71,7 +71,7 @@
         {
             "_type": 116,
             "type": "StepsRight",
-            "x": 215.8,
+            "x": 222.3,
             "y": 187.20000000000002,
             "width": 20,
             "height": 35,
@@ -121,6 +121,24 @@
             "width": 20,
             "height": 26,
             "sprite": 42
+        },
+        {
+            "_type": 240,
+            "type": "Icon",
+            "x": 13,
+            "y": 13,
+            "width": 22,
+            "height": 22,
+            "sprite": 45
+        },
+        {
+            "_type": 192,
+            "type": "ConnectionStatusIcon",
+            "x": 13,
+            "y": 13,
+            "width": 22,
+            "height": 22,
+            "sprite": 44
         },
         {
             "_type": 0,
@@ -436,6 +454,18 @@
             "data": {},
             "type": "0821",
             "path": "./amazfit/5bf55eb8305da_21112018/dots.bmp"
+        },
+        {
+            "index": 44,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/connected.bmp"
+        },
+        {
+            "index": 45,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/disconnected.bmp"
         }
     ],
     "raw": {},
