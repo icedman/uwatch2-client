@@ -136,7 +136,6 @@ class Uwatch2(_uwatch2ble.Uwatch2Ble):
     def c(self, cmd):
         return self._send_c(cmd)
 
-
     def f(self, id):
         self.c("fe ea 10 06 19 04") # - send display watchface
         self._send_f(id)
@@ -154,7 +153,6 @@ class Uwatch2(_uwatch2ble.Uwatch2Ble):
         self._consume(20)
 
         self.c("fe ea 10 06 19 04")
-
 
     def x(self, cnt):
         # fe ea 10 0a 31 5d 98 9a 94 08 - sync time
@@ -197,18 +195,8 @@ class Uwatch2(_uwatch2ble.Uwatch2Ble):
 
         self._consume(cnt)
 
-    def zz(self):
-        self._zz();
-
-    # Quick View
-    def xx(self, id):
-        self.set_watch_face(0)
-        # self._yy()
-        self._xx(id)
-        self._yy()
-
-    def yy(self):
-        return self._yy()
+    def e(self):
+        return self._e()
 
     def set_quick_view(self, enabled_bool):
         """Enable or disable Quick View

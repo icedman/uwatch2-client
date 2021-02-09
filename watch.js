@@ -39,7 +39,7 @@ const renderBitmaps = (res, outputDir) => {
     for (let i = 0; i < 10; i++) {
       const sprite = sprites[i];
       const spr = parser.dataViewToImage(sprite.data, 240, 24);
-      const filePath = './' + outputDir + '/bg' + i + '.bmp';
+      const filePath = './' + outputDir + '/' + i + '.bmp';
       saveBMP(spr, filePath);
       sprite.path = filePath;
       bg.data = [ ...bg.data, ...spr.data ]
@@ -65,11 +65,11 @@ const renderBitmaps = (res, outputDir) => {
   res.spriteUse = {}
 
   for (const entity of entities) {
-    const count = parser.EntitySpriteCounts[entity.type];
+    const count = parser.EntitySpriteCounts[entity.type] || 1;
     for (let idx = 0; idx < count; idx++) {
-        const offset = idx % count || 1;
+        const offset = idx % count;
         const sprite = sprites[entity.sprite + offset];
-        sprite.bitmaps = sprite.bitmaps || [];
+
         res.spriteUse[entity.sprite] = (res.spriteUse[entity.sprite] || 1)
         if (dumped[sprite.index]) {
             if (idx === 0) {
@@ -123,33 +123,41 @@ const cleanDir = (path) => {
 const decompile = (path) => {
   console.log('decompile:' + path);
   let baseName = (p.parse(path).base.replace('.bin', ''));
-  let outputDir = 'output/' + baseName + '_extract';
-  cleanDir(outputDir);
+  let outputDir = 'output/';
   
   let binary = fs.readFileSync(path).buffer;
-  console.log(outputDir);
-  console.log(path);
   // console.log(binary);
   let res = parser.decodeWatchface(binary);
-  
+
+  outputDir = p.join(outputDir, res.id + '_extract');
+  cleanDir(outputDir);
+  console.log(outputDir);
+  console.log(path);
+
   let preview = renderBitmaps(res, outputDir);
   if (preview) {
-    saveBMP(preview, `./output/${baseName}.bmp`);
+    saveBMP(preview, `./output/${res.id}.bmp`);
   }
 }
 
 const compile = (path) => {
   console.log('compile:' + path);
-  let file = JSON.parse(fs.readFileSync(p.join(path, 'data.json'), 'utf-8'));
-  console.log(JSON.stringify(file, null, 4))
+  let data = JSON.parse(fs.readFileSync(p.join(path, 'data.json'), 'utf-8'));
 
+  // load bitmaps
+  data.sprites.forEach(sprite => {
+    if (!fs.existsSync(sprite.path)) return;
+    let bmpBuffer = fs.readFileSync(sprite.path);
+    let bmpData = bmp.decode(bmpBuffer);
+    let dd = parser.imageToDataView(bmpData);
+    sprite.data = dd;
+  })
 
-  /*
-  let enc = parser.encodeWatchface(res);
-  fs.writeFileSync('tmp.bin', enc);
-  */
-  // console.log(enc)
+  // console.log(JSON.stringify(data, null, 4))
+  // fs.writeFileSync(`./output/${data.id}_compiled.json`, JSON.stringify(data, null, 2))
 
+  let enc = parser.encodeWatchface(data);
+  fs.writeFileSync(`./output/${data.id}_compiled.bin`, enc);
 }
 
 let opt = process.argv[2];
@@ -168,6 +176,7 @@ if (opt === '-c') {
 // decompile directory
 } else if (opt === '-d') {
   fs.readdirSync(f).forEach(file => {
+    if (!/\.bin/.exec(file)) return;
     try {
       decompile(p.join(f, file));
     } catch(err) {

@@ -16,6 +16,58 @@ import pygatt.exceptions
 
 log = logging.getLogger(__name__)
 
+def _hex(h,n):
+    return "{0:0{1}x}".format(h,n)
+
+def crc(bytes):
+    result = 65258
+    for b in bytes:
+        b2 = (((result & 0xff) << 8) | ((0xFF00 & result) >> 8)) ^ (b & 0xff)
+        b3 = b2 ^ ((b2 & 0xff) >> 4)
+        b4 = b3 ^ (((b3 & 0xff) << 8) << 4)
+        result = b4 ^ (((b4 & 0xff) << 4) << 1)
+
+    return _hex(result & 0xffff, 4)
+
+def dump(bytes, l):
+    str = 'fe ';
+    str = str + crc(bytes);
+    str += ' ';
+    str += _hex(l & 0xff, 2);
+    for c in bytes:
+        str += ' ' + _hex(c, 2)
+    return str
+
+def read_file(f):
+    lines = []
+    cleaned = []
+    bytes = []
+    l = 0
+    size = 0
+    idx = 0;
+    with open(f, "rb") as f:
+        l = f.read(None)
+        for c in l:
+            bytes.append(c)
+            idx += 1
+            if idx > 255:
+                lines.append(dump(bytes, idx))
+                bytes = []
+                size += idx
+                idx = 0
+        if (idx > 0):
+            lines.append(dump(bytes, idx))
+            bytes = []
+            size += idx
+            idx = 0
+
+    # res = ""
+    # for l in lines:
+    #     res += l + " \n"
+
+    # print(_hex(size,4))
+    return [ _hex(size,6), lines ]
+
 class Uwatch2Ble(object):
     COMMAND_UUID = uuid.UUID("0000fee2-0000-1000-8000-00805f9b34fb")
     DATA_UUID = uuid.UUID("0000fee6-0000-1000-8000-00805f9b34fb")
@@ -221,100 +273,31 @@ class Uwatch2Ble(object):
         self._send_raw_cmd(cmd_key, pack_str, *arg_tup)
         return self._get_response(cmd_key, unpack_str)
 
-    def crc16(bytes):
-        return "x"
-
     def _consume(self, cnt):
         for i in range(cnt):
             msg_type, *msg_tup = self._queue.get()
             log.info(f"Read from queue: msg_type={msg_type} msg_tup={msg_tup}")
         log.info("consume")
 
-    def _consume2(self, cmd, cnt):
-        for i in range(cnt):
-            msg_type, *msg_tup = self._queue.get()
-            if msg_type == "notification":
-                recv_charcs_handle, recv_pkg_bytes = msg_tup
-                acc_payload_bytes = self._handle_async_response(cmd, recv_pkg_bytes)
-                if acc_payload_bytes:
-                    log.info(self.unpack_payload_bytes(acc_payload_bytes, unpack_str))
-        log.info("consume")
-
-    def _zz(self):
-        self._send_payload(self._get_bytes("fe ea 10 06 25 ff"))
-        self._consume2(0x255, 10)
-
-    def _yy(self):
+    def _send_e(self):
         self._send_payload(self._get_bytes("fe ea 10 06 19 04"))
-        self._consume(1)
-
-    def _xx(self, id):
-
-        log.info("sending")
-
-        self._send_payload(self._get_bytes("fe ea 10 05 84"))
-        self._consume(1)
-        self._send_payload(self._get_bytes("fe ea 10 05 29"))
-        self._consume(1)
-
-        # self._yy()
-
-        cnt = 0
-        cnt2 = 0
-
-        # self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 00 00"))
-
-        # data 15
-        if id == 15:
-            file1 = open('data-15.txt', 'r')
-            self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 f0 90"))
-        else:
-            # data 26
-            file1 = open('data-26.txt', 'r')
-            self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 4b f6"))
-
-        # send device version
-        # self._send_payload(self._get_bytes("fe ea 10 06 1e 01"))
-
-        # send device language
-        # self._send_payload(self._get_bytes("fe ea 10 06 1b 00"))
-
-        Lines = file1.readlines()
-        for line in Lines:
-            log.info(cnt)
-            cnt = cnt + 1
-            cnt2 = cnt2 + 1
-
-            self._send_payload2(self._get_bytes(line.strip()))
-
-            # if (cnt2 > 13):
-            #     self._consume(14)
-            #     cnt2 = 0
-
-        log.info("ok?")
-        self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 00 00"))
-        self._consume(1)
-
-        self._yy()
-
-        self._send_payload(self._get_bytes("fe ea 10 05 29"))
-        self._consume(1)
-        self._send_payload(self._get_bytes("fe ea 10 05 84"))
         self._consume(1)
 
     def _send_c(self, cmd):
         self._send_payload(self._get_bytes(cmd))
 
     def _send_f(self, id):
+        log.info(f"sending {id}")
         cnt = 0
         cnt2 = 0
-        if id == 15:
-            file1 = open('data-15.txt', 'r')
-            self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 f0 90"))
-        else:
-            # data 26
-            file1 = open('data-26.txt', 'r')
-            self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 4b f6"))
+
+        source = id
+
+        if id in [15, 432, 289, 26]:
+            source = f"./source/{id}.bin"
+
+        sz, Lines = read_file(source)
+        self._send_payload(self._get_bytes("fe ea 10 09 74 00" + sz))
 
         # send device version
         self._send_payload(self._get_bytes("fe ea 10 06 1e 01"))
@@ -322,14 +305,13 @@ class Uwatch2Ble(object):
         # send device language
         self._send_payload(self._get_bytes("fe ea 10 06 1b 00"))
 
-        Lines = file1.readlines()
         for line in Lines:
             log.info(cnt)
             cnt = cnt + 1
             cnt2 = cnt2 + 1
             
-            # if (cnt2 > 13):
-            #     self._consume(14)
+            # if (cnt2 > 20):
+            #     self._consume(10)
             #     cnt2 = 0
 
             self._send_payload2(self._get_bytes(line.strip()))

@@ -13,6 +13,8 @@ const crc16 = (bytes) => {
   let result = 65258;
   
   for (const b of bytes) {
+    console.log(b)
+    return ""
     let b2 = (((result & 0xff) << 8) | ((0xFF00 & result) >> 8)) ^ (b & 0xff);
     let b3 = b2 ^ ((b2 & 0xff) >> 4);
     let b4 = b3 ^ (((b3 & 0xff) << 8) << 4);
@@ -31,7 +33,7 @@ const dump = (data) => {
     for (const b of data) {
         str += toHexString([b]) + ' ';
     }
-    console.log(str);
+    // console.log(str);
 }
 
 idx = 0;
@@ -39,13 +41,11 @@ bb = [];
 for (const b of binary) {
     bb.push(b);
     if (idx++ == 255) {
-        dump(bb)
-        idx = 0;
-        bb = [];
+        // dump(bb)
+        // idx = 0;
+        // bb = [];
     }    
 }
-// while(idx!=256) {
-//   bb.push(0);
-//   idx++;
-// }
-dump(bb)
+// dump(bb)
+
+console.log(JSON.stringify(bb))

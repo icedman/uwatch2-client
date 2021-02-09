@@ -39,6 +39,11 @@ const EntityTypes = {
   0xd4: 'BatteryPercentageRight',
   0xc0: 'ConnectionStatusIcon',
   0xf0: 'Icon',
+  0xf1: 'MinuteHand',
+  0xf2: 'HourHand',
+  0xf3: 'SecondHand',
+  0xf4: 'Icon', // analog button top - watch 245
+  0xf5: 'Icon'  // analog button down
 };
 
 const EntitySpriteCounts = {
@@ -153,7 +158,7 @@ const encodeRle = (dv) => {
   let prev = -1;
   for(let i=0;i<dv.byteLength;i+=2) {
     let color = dv.getUint16(i, true);
-    if ((prev != color && sz > 0) || sz > 255) {
+    if ((prev != color && sz > 0) || sz > 239) {
       result.setUint16(idx, prev, true);
       idx += 2;
       result.setUint8(idx, sz);
@@ -177,11 +182,13 @@ const decodeWatchface = data => {
   const dv = new DataView(data);
   parsed.raw = dv;
 
-  parsed.flag = dv.getUint8(5);
-
+  parsed.header = dv.getUint8(0);
   const entityCount = dv.getUint8(1); //  - 1;
   const spriteCount = dv.getUint8(2);
-  parsed.id = dv.getUint8(3);
+  parsed.id = dv.getUint16(3, true);
+
+  parsed.analog = dv.getUint8(4);
+  parsed.flag = dv.getUint8(5);
 
   parsed.bg = {
     spriteWidth: dv.getUint8(8),
@@ -205,8 +212,7 @@ const decodeWatchface = data => {
   }
 
   for (let i = 0; i < spriteCount; i++) {
-    const spriteOffset =
-      SpriteDataOffset + dv.getUint32(SpriteOffsetsOffset + i * 4, true);
+    const spriteOffset = SpriteDataOffset + dv.getUint32(SpriteOffsetsOffset + i * 4, true);
     const length = dv.getUint16(SpriteSizesOffset + i * 2, true);
     const _type = dv.getUint16(spriteOffset)
     const type = _type
@@ -214,9 +220,6 @@ const decodeWatchface = data => {
       .padStart(4, '0');
     parsed.sprites.push({
       index: i,
-      // _offset: spriteOffset - SpriteDataOffset,
-      // _length: length,
-      // _type: type,
       data:
         type === '0821'
           ? decodeRle(dv, spriteOffset + 2, length - 2)
@@ -232,11 +235,13 @@ const decodeWatchface = data => {
 const encodeWatchface = (data) => {
   const dv = new DataView(new ArrayBuffer(1e6));
 
-  dv.setUint8(5, data.flag);
+  dv.setUint8(0, data.header);
   dv.setUint8(1, data.entities.length)
   dv.setUint8(2, data.sprites.length)
   dv.setUint8(3, data.id)
+  dv.setUint8(4, data.analog)
 
+  dv.setUint8(5, data.flag);
   dv.setUint8(8, data.bg.spriteWidth)
   dv.setUint8(9, data.bg.spriteHeight)
   dv.setUint8(10, data.bg.unk)
@@ -255,11 +260,18 @@ const encodeWatchface = (data) => {
   let idx = 0;
   for (let i = 0; i < data.sprites.length; i++) {
     const sprite = data.sprites[i];
+
+    // sprite offsets
     dv.setUint32(SpriteOffsetsOffset + i * 4, idx, true);
 
     // type
     dv.setUint16(SpriteDataOffset + idx, 0x0821);
     idx += 2;
+
+    if (!sprite.data || !sprite.data.byteLength) {
+      dv.setUint16(SpriteSizesOffset + i * 2, 2, true)
+      continue;
+    }
 
     //encode RLE
     let rle = encodeRle(sprite.data);
@@ -267,13 +279,13 @@ const encodeWatchface = (data) => {
       dv.setUint8(SpriteDataOffset + idx + j, rle.getUint8(j), true);
     }
     idx += rle.byteLength;
-    // console.log(rle.byteLength + 2);
+    // console.log(rle.byteLength);
 
-    // size
+    // size (+2 counts type)
     dv.setUint16(SpriteSizesOffset + i * 2, rle.byteLength + 2, true)
   }
 
-  return new DataView(dv.buffer.slice(0, SpriteDataOffset + idx ));
+  return new DataView(dv.buffer.slice(0, SpriteDataOffset + idx));
 }
 
 module.exports = {
