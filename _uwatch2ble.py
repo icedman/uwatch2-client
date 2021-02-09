@@ -14,6 +14,8 @@ import uuid
 import pygatt
 import pygatt.exceptions
 
+import time
+
 log = logging.getLogger(__name__)
 
 def _hex(h,n):
@@ -296,6 +298,9 @@ class Uwatch2Ble(object):
         if id in [15, 432, 289, 26]:
             source = f"./source/{id}.bin"
 
+        if id == 1:
+            source = f"./output/1_compiled.bin"
+            
         sz, Lines = read_file(source)
         self._send_payload(self._get_bytes("fe ea 10 09 74 00" + sz))
 
@@ -311,8 +316,9 @@ class Uwatch2Ble(object):
             cnt2 = cnt2 + 1
             
             # if (cnt2 > 20):
-            #     self._consume(10)
             #     cnt2 = 0
+            #     time.sleep(2)
+            #     self._consume(10)
 
             self._send_payload2(self._get_bytes(line.strip()))
 

@@ -1,0 +1,460 @@
+{
+    "bg": {
+        "spriteWidth": 240,
+        "spriteHeight": 24,
+        "unk": 0
+    },
+    "entities": [
+        {
+            "_type": 64,
+            "type": "HoursDigit1",
+            "x": 28.6,
+            "y": 105.3,
+            "width": 38,
+            "height": 65,
+            "sprite": 10
+        },
+        {
+            "_type": 65,
+            "type": "HoursDigit2",
+            "x": 72.8,
+            "y": 105.3,
+            "width": 38,
+            "height": 65,
+            "sprite": 10
+        },
+        {
+            "_type": 240,
+            "type": "Icon",
+            "x": 114.4,
+            "y": 118.3,
+            "width": 18,
+            "height": 34,
+            "sprite": 43
+        },
+        {
+            "_type": 67,
+            "type": "MinutesDigit1",
+            "x": 136.5,
+            "y": 105.3,
+            "width": 38,
+            "height": 65,
+            "sprite": 10
+        },
+        {
+            "_type": 68,
+            "type": "MinutesDigit2",
+            "x": 180.70000000000002,
+            "y": 105.3,
+            "width": 38,
+            "height": 65,
+            "sprite": 10
+        },
+        {
+            "_type": 64,
+            "type": "DayOfWeekCZ",
+            "x": 29.900000000000002,
+            "y": 59.800000000000004,
+            "width": 70,
+            "height": 29,
+            "sprite": 20
+        },
+        {
+            "_type": 130,
+            "type": "HeartRateLeft",
+            "x": 58.5,
+            "y": 187.20000000000002,
+            "width": 20,
+            "height": 35,
+            "sprite": 31
+        },
+        {
+            "_type": 116,
+            "type": "StepsRight",
+            "x": 215.8,
+            "y": 187.20000000000002,
+            "width": 20,
+            "height": 35,
+            "sprite": 31
+        },
+        {
+            "_type": 212,
+            "type": "BatteryPercentageRight",
+            "x": 204.1,
+            "y": 9.1,
+            "width": 20,
+            "height": 35,
+            "sprite": 31
+        },
+        {
+            "_type": 17,
+            "type": "Month",
+            "x": 178.1,
+            "y": 57.2,
+            "width": 20,
+            "height": 35,
+            "sprite": 31
+        },
+        {
+            "_type": 48,
+            "type": "Day",
+            "x": 115.7,
+            "y": 57.2,
+            "width": 20,
+            "height": 35,
+            "sprite": 31
+        },
+        {
+            "_type": 240,
+            "type": "Icon",
+            "x": 11.700000000000001,
+            "y": 187.20000000000002,
+            "width": 35,
+            "height": 36,
+            "sprite": 41
+        },
+        {
+            "_type": 240,
+            "type": "Icon",
+            "x": 210.6,
+            "y": 9.1,
+            "width": 20,
+            "height": 26,
+            "sprite": 42
+        },
+        {
+            "_type": 0,
+            "type": "Unknown00",
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "sprite": 0
+        }
+    ],
+    "sprites": [
+        {
+            "index": 0,
+            "data": {},
+            "debug": {
+                "spriteOffset": 1700,
+                "length": 356
+            },
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0.bmp"
+        },
+        {
+            "index": 1,
+            "data": {},
+            "debug": {
+                "spriteOffset": 2056,
+                "length": 71
+            },
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/1.bmp"
+        },
+        {
+            "index": 2,
+            "data": {},
+            "debug": {
+                "spriteOffset": 2127,
+                "length": 2264
+            },
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/2.bmp"
+        },
+        {
+            "index": 3,
+            "data": {},
+            "debug": {
+                "spriteOffset": 4391,
+                "length": 1970
+            },
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/3.bmp"
+        },
+        {
+            "index": 4,
+            "data": {},
+            "debug": {
+                "spriteOffset": 6361,
+                "length": 1772
+            },
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/4.bmp"
+        },
+        {
+            "index": 5,
+            "data": {},
+            "debug": {
+                "spriteOffset": 8133,
+                "length": 1043
+            },
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/5.bmp"
+        },
+        {
+            "index": 6,
+            "data": {},
+            "debug": {
+                "spriteOffset": 9176,
+                "length": 3044
+            },
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/6.bmp"
+        },
+        {
+            "index": 7,
+            "data": {},
+            "debug": {
+                "spriteOffset": 12220,
+                "length": 3587
+            },
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/7.bmp"
+        },
+        {
+            "index": 8,
+            "data": {},
+            "debug": {
+                "spriteOffset": 15807,
+                "length": 3431
+            },
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/8.bmp"
+        },
+        {
+            "index": 9,
+            "data": {},
+            "debug": {
+                "spriteOffset": 19238,
+                "length": 2963
+            },
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/9.bmp"
+        },
+        {
+            "index": 10,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0001.bmp"
+        },
+        {
+            "index": 11,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0002.bmp"
+        },
+        {
+            "index": 12,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0003.bmp"
+        },
+        {
+            "index": 13,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0007.bmp"
+        },
+        {
+            "index": 14,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0008.bmp"
+        },
+        {
+            "index": 15,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0009.bmp"
+        },
+        {
+            "index": 16,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0010.bmp"
+        },
+        {
+            "index": 17,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0011.bmp"
+        },
+        {
+            "index": 18,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0012.bmp"
+        },
+        {
+            "index": 19,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0013.bmp"
+        },
+        {
+            "index": 20,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0034.bmp"
+        },
+        {
+            "index": 21,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0035.bmp"
+        },
+        {
+            "index": 22,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0036.bmp"
+        },
+        {
+            "index": 23,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0037.bmp"
+        },
+        {
+            "index": 24,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0038.bmp"
+        },
+        {
+            "index": 25,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0039.bmp"
+        },
+        {
+            "index": 26,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0040.bmp"
+        },
+        {
+            "index": 27,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0040.bmp"
+        },
+        {
+            "index": 28,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0040.bmp"
+        },
+        {
+            "index": 29,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0040.bmp"
+        },
+        {
+            "index": 30,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0040.bmp"
+        },
+        {
+            "index": 31,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0024.bmp"
+        },
+        {
+            "index": 32,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0025.bmp"
+        },
+        {
+            "index": 33,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0026.bmp"
+        },
+        {
+            "index": 34,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0027.bmp"
+        },
+        {
+            "index": 35,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0028.bmp"
+        },
+        {
+            "index": 36,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0029.bmp"
+        },
+        {
+            "index": 37,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0030.bmp"
+        },
+        {
+            "index": 38,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0031.bmp"
+        },
+        {
+            "index": 39,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0032.bmp"
+        },
+        {
+            "index": 40,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/0033.bmp"
+        },
+        {
+            "index": 41,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/heart.bmp"
+        },
+        {
+            "index": 42,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/percent.bmp"
+        },
+        {
+            "index": 43,
+            "data": {},
+            "type": "0821",
+            "path": "./amazfit/5bf55eb8305da_21112018/dots.bmp"
+        }
+    ],
+    "raw": {},
+    "header": 129,
+    "id": 1,
+    "analog": 0,
+    "flag": 0,
+    "spriteUse": {
+        "0": 1,
+        "10": 1,
+        "11": 1,
+        "12": 1,
+        "13": 4,
+        "15": 1,
+        "23": 2,
+        "24": 3,
+        "34": 1,
+        "35": 4,
+        "45": 1,
+        "46": 1
+    }
+}

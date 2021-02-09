@@ -1,0 +1,130 @@
+{
+  "bg": {
+    "spriteWidth": 240,
+    "spriteHeight": 24,
+    "unk": 0
+  },
+  "entities": [
+  ],
+  "sprites": [
+    {
+      "index": 0,
+      "data": {},
+      "debug": {
+        "spriteOffset": 1700,
+        "length": 356
+      },
+      "type": "0821",
+      "path": "./amazfit/5bf55eb8305da_21112018/0.bmp"
+    },
+    {
+      "index": 1,
+      "data": {},
+      "debug": {
+        "spriteOffset": 2056,
+        "length": 71
+      },
+      "type": "0821",
+      "path": "./amazfit/5bf55eb8305da_21112018/1.bmp"
+    },
+    {
+      "index": 2,
+      "data": {},
+      "debug": {
+        "spriteOffset": 2127,
+        "length": 2264
+      },
+      "type": "0821",
+      "path": "./amazfit/5bf55eb8305da_21112018/2.bmp"
+    },
+    {
+      "index": 3,
+      "data": {},
+      "debug": {
+        "spriteOffset": 4391,
+        "length": 1970
+      },
+      "type": "0821",
+      "path": "./amazfit/5bf55eb8305da_21112018/3.bmp"
+    },
+    {
+      "index": 4,
+      "data": {},
+      "debug": {
+        "spriteOffset": 6361,
+        "length": 1772
+      },
+      "type": "0821",
+      "path": "./amazfit/5bf55eb8305da_21112018/4.bmp"
+    },
+    {
+      "index": 5,
+      "data": {},
+      "debug": {
+        "spriteOffset": 8133,
+        "length": 1043
+      },
+      "type": "0821",
+      "path": "./amazfit/5bf55eb8305da_21112018/5.bmp"
+    },
+    {
+      "index": 6,
+      "data": {},
+      "debug": {
+        "spriteOffset": 9176,
+        "length": 3044
+      },
+      "type": "0821",
+      "path": "./amazfit/5bf55eb8305da_21112018/6.bmp"
+    },
+    {
+      "index": 7,
+      "data": {},
+      "debug": {
+        "spriteOffset": 12220,
+        "length": 3587
+      },
+      "type": "0821",
+      "path": "./amazfit/5bf55eb8305da_21112018/7.bmp"
+    },
+    {
+      "index": 8,
+      "data": {},
+      "debug": {
+        "spriteOffset": 15807,
+        "length": 3431
+      },
+      "type": "0821",
+      "path": "./amazfit/5bf55eb8305da_21112018/8.bmp"
+    },
+    {
+      "index": 9,
+      "data": {},
+      "debug": {
+        "spriteOffset": 19238,
+        "length": 2963
+      },
+      "type": "0821",
+      "path": "./amazfit/5bf55eb8305da_21112018/9.bmp"
+    }
+  ],
+  "raw": {},
+  "header": 129,
+  "id": 1,
+  "analog": 0,
+  "flag": 0,
+  "spriteUse": {
+    "0": 1,
+    "10": 1,
+    "11": 1,
+    "12": 1,
+    "13": 4,
+    "15": 1,
+    "23": 2,
+    "24": 3,
+    "34": 1,
+    "35": 4,
+    "45": 1,
+    "46": 1
+  }
+}

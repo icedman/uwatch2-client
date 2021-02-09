@@ -139,7 +139,6 @@ class Uwatch2(_uwatch2ble.Uwatch2Ble):
     def f(self, id):
         self.c("fe ea 10 06 19 04") # - send display watchface
         self._send_f(id)
-        # self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 00 00"))
         time.sleep(2)
         
         self._send_payload(self._get_bytes("fe ea 10 09 74 00 00 00 00"))
@@ -149,8 +148,6 @@ class Uwatch2(_uwatch2ble.Uwatch2Ble):
         self.c("fe ea 10 06 19 04") # - send display watchface
         self.c("fe ea 10 05 29") # - query watchface
         self.c("fe ea 10 05 84") # - query support watchface
-
-        self._consume(20)
 
         self.c("fe ea 10 06 19 04")
 
